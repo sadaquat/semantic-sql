@@ -1,0 +1,57 @@
+# SemanticSQL — Business Semantic Layer for Northwind
+# Maps natural-language business terms to SQL logic
+
+metrics:
+  revenue:
+    description: "Total revenue from completed orders, net of discounts"
+    sql: "SUM(od.unit_price * od.quantity * (1 - od.discount))"
+    source_tables: ["order_details od", "orders o"]
+    join_logic: "od.order_id = o.order_id"
+    filters: "o.shipped_date IS NOT NULL"
+
+  order_count:
+    description: "Number of distinct orders"
+    sql: "COUNT(DISTINCT o.order_id)"
+    source_tables: ["orders o"]
+
+  average_order_value:
+    description: "Average revenue per order"
+    sql: "SUM(od.unit_price * od.quantity * (1 - od.discount)) / COUNT(DISTINCT o.order_id)"
+    source_tables: ["order_details od", "orders o"]
+    join_logic: "od.order_id = o.order_id"
+
+dimensions:
+  customer:
+    description: "Customer entity"
+    primary_table: "customers c"
+    key: "c.customer_id"
+    display_name: "c.company_name"
+
+  product:
+    description: "Product entity"
+    primary_table: "products p"
+    key: "p.product_id"
+    display_name: "p.product_name"
+
+  region:
+    description: "Customer region/country"
+    primary_table: "customers c"
+    expression: "c.country"
+
+  time_period:
+    description: "Order date grouping"
+    primary_table: "orders o"
+    expression: "DATE_TRUNC('month', o.order_date)"
+
+business_rules:
+  top_customer:
+    description: "A 'top customer' is defined as one in the top 10 by revenue"
+    logic: "Rank customers by SUM(revenue) DESC, take top 10"
+
+  active_product:
+    description: "An 'active product' is one not discontinued and with at least one order in the last 12 months"
+    sql_filter: "p.discontinued = 0 AND p.product_id IN (SELECT DISTINCT product_id FROM order_details od JOIN orders o ON od.order_id = o.order_id WHERE o.order_date >= CURRENT_DATE - INTERVAL '12 months')"
+
+  recent_period:
+    description: "When user says 'recent' or 'lately', interpret as last 90 days"
+    sql_filter: "o.order_date >= CURRENT_DATE - INTERVAL '90 days'"
