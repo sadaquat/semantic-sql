@@ -14,6 +14,14 @@
 
 # 
 
+### Naive LLM said total revenue is $1,354,458
+
+### Your SemanticSQL said $1,239,856
+
+### The naive answer is wrong by $114,602 — a 9.2% overstatement
+
+
+
 # Result: \~10% difference. In a $50M revenue company, that's a $5M reporting error.
 
 # 
