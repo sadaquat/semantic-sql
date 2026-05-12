@@ -1,3 +1,27 @@
+# \## Why this matters: side-by-side comparison
+
+# 
+
+# Naive text-to-SQL guesses business logic. SemanticSQL uses encoded definitions.
+
+# 
+
+# For "What is our total revenue?":
+
+# \- \*\*Naive LLM\*\*: SUMs unit\_price × quantity — ignores discounts
+
+# \- \*\*SemanticSQL\*\*: SUMs unit\_price × quantity × (1 - discount) — uses the business definition
+
+# 
+
+# Result: \~10% difference. In a $50M revenue company, that's a $5M reporting error.
+
+# 
+
+# This is the gap between a demo and an enterprise-grade tool.
+
+
+
 # \# SemanticSQL
 
 # 
