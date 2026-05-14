@@ -1,13 +1,10 @@
 import os
 import yaml
-from dotenv import load_dotenv
+from config import get_secret
 import psycopg2
 import chromadb
 from sentence_transformers import SentenceTransformer
 from langchain_groq import ChatGroq
-
-load_dotenv()
-
 
 class SemanticSQLEngine:
     def __init__(self):
@@ -23,13 +20,13 @@ class SemanticSQLEngine:
         # Load LLM (Groq + Llama 3.3)
         self.llm = ChatGroq(
             model="llama-3.3-70b-versatile",
-            groq_api_key=os.getenv("GROQ_API_KEY"),
+            groq_api_key=get_secret("GROQ_API_KEY"),
             temperature=0
         )
 
         # DB connection
         self.conn = psycopg2.connect(
-                    os.getenv("NEON_DATABASE_URL") or os.getenv("DATABASE_URL")
+                    get_secret("NEON_DATABASE_URL") or get_secret("DATABASE_URL")
         )
 
     def retrieve_relevant_tables(self, question, top_k=4):

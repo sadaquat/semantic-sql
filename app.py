@@ -3,11 +3,11 @@ import yaml
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-from dotenv import load_dotenv
+from config import get_secret
 
 from query_engine import SemanticSQLEngine
 
-load_dotenv()
+#load_dotenv()
 
 # ---------- Page setup ----------
 st.set_page_config(
