@@ -7,7 +7,8 @@ from sentence_transformers import SentenceTransformer
 load_dotenv()
 
 # Connect to Postgres
-conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+conn = psycopg2.connect(
+    os.getenv("NEON_DATABASE_URL") or os.getenv("DATABASE_URL"))
 cur = conn.cursor()
 
 # Get all tables and their columns

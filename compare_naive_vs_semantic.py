@@ -34,7 +34,8 @@ SQL:"""
 
 
 def run_query(sql):
-    conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+    conn = psycopg2.connect(
+            os.getenv("NEON_DATABASE_URL") or os.getenv("DATABASE_URL"))
     cur = conn.cursor()
     try:
         cur.execute(sql)

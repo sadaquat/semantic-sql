@@ -28,7 +28,9 @@ class SemanticSQLEngine:
         )
 
         # DB connection
-        self.conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+        self.conn = psycopg2.connect(
+                    os.getenv("NEON_DATABASE_URL") or os.getenv("DATABASE_URL")
+        )
 
     def retrieve_relevant_tables(self, question, top_k=4):
         """Find the most relevant tables for the question."""
