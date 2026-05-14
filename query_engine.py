@@ -37,14 +37,29 @@ class SemanticSQLEngine:
         return results["documents"][0]
 
     def find_relevant_semantic_terms(self, question):
-        """Identify which metrics/dimensions/business_rules might apply."""
+        """Identify which semantic terms might apply, with smarter matching."""
         question_lower = question.lower()
         relevant = {"metrics": {}, "dimensions": {}, "business_rules": {}}
 
+        # Synonyms map — extend this as needed
+        synonyms = {
+            "revenue": ["revenue", "sales", "earnings", "income"],
+            "order_count": ["order count", "number of orders", "how many orders", "total orders"],
+            "average_order_value": ["average order", "avg order", "aov", "mean order"],
+            "top_customer": ["top customer", "biggest customer", "best customer", "largest customer"],
+            "active_product": ["active product", "current product", "available product"],
+            "recent_period": ["recent", "lately", "last 90 days", "latest"],
+            "customer": ["customer", "client", "buyer"],
+            "product": ["product", "item", "sku"],
+            "region": ["region", "country", "location", "geography"],
+            "time_period": ["month", "year", "quarter", "monthly", "yearly", "by time"],
+        }
+
         for category in ["metrics", "dimensions", "business_rules"]:
             for key, definition in self.semantic.get(category, {}).items():
-                if (key.replace("_", " ") in question_lower
-                        or any(word in question_lower for word in key.split("_"))):
+                # Use synonym list if defined, else fall back to the key itself
+                triggers = synonyms.get(key, [key.replace("_", " ")])
+                if any(trigger in question_lower for trigger in triggers):
                     relevant[category][key] = definition
 
         return relevant
