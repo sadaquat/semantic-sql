@@ -52,7 +52,7 @@ with st.sidebar:
             st.session_state["question"] = q
 
     st.divider()
-    st.caption("Built by [Your Name] · [GitHub link]")
+    st.caption("Built by Sadaquat · [GitHub](https://github.com/sadaquat/semantic-sql) · [LinkedIn](www.linkedin.com/in/sadaquat-khan)")
 
 
 # ---------- Header ----------
